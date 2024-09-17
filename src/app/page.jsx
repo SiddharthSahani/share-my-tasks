@@ -1,4 +1,4 @@
-import { TaskCard } from "@/components/TaskCard";
+import { TaskList } from "@/components/TaskList";
 
 
 export default function Home() {
@@ -34,11 +34,7 @@ export default function Home() {
       <h1 className="text-center text-4xl font-bold">
         Share My Tasks
       </h1>
-      <div className="bg-blue-300">
-        {
-          tasks.map((task, index) => <TaskCard key={index} task={task} />)
-        }
-      </div>
+      <TaskList tasks={tasks}/>
     </>
   );
 }
