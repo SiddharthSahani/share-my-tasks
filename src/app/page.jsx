@@ -1,4 +1,5 @@
 "use client"
+import { NewTaskForm } from "@/components/NewTaskForm";
 import { TaskList } from "@/components/TaskList";
 import { useState, useEffect } from "react";
 
@@ -35,6 +36,10 @@ export default function Home() {
     ])
   }, [])
 
+  const addTask = (task) => {
+    setTasks([...tasks, task])
+  }
+
   const toggleStatus = (index) => {
     tasks[index].completed = !tasks[index].completed
     setTasks([...tasks])
@@ -50,6 +55,7 @@ export default function Home() {
       <h1 className="text-center text-4xl font-bold">
         Share My Tasks
       </h1>
+      <NewTaskForm addTaskHandler={addTask} />
       <TaskList tasks={tasks} toggleStatusHandler={toggleStatus} deleteTaskHandler={deleteTask}/>
     </>
   );
