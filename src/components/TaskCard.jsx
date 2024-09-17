@@ -1,10 +1,10 @@
 import React from 'react'
 
 
-export function TaskCard({ task }) {
+export function TaskCard({ task, toggleStatusHandler, deleteTaskHandler }) {
   return (
     <div className="bg-cyan-600 rounded-xl my-2 flex py-2 px-2">
-      <button className='w-2/12 bg-cyan-700 mr-2 rounded-lg text-lg'>
+      <button className='w-2/12 bg-cyan-700 mr-2 rounded-lg text-lg' onClick={toggleStatusHandler}>
         Status:
         <div className={`text-xl ${task.completed ? "text-green-300" : "text-rose-300"}`}>
           {
@@ -33,7 +33,7 @@ export function TaskCard({ task }) {
           </div>
         </div>
       </div>
-      <button className='w-2/12 bg-red-500 font-bold text-2xl ml-2 rounded-lg'>X</button>
+      <button className='w-2/12 bg-red-500 font-bold text-2xl ml-2 rounded-lg' onClick={deleteTaskHandler}>X</button>
     </div>
   )
 }
