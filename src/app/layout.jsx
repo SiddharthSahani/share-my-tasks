@@ -1,10 +1,10 @@
-import "./globals.css";
+import "./globals.css"
 
 
 export const metadata = {
   title: "Placeholder",
   description: "Under construction",
-};
+}
 
 export default function RootLayout({ children }) {
   return (
@@ -13,5 +13,5 @@ export default function RootLayout({ children }) {
         {children}
       </body>
     </html>
-  );
+  )
 }

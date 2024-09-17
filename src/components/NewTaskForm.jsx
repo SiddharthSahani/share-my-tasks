@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState } from 'react'
 
 
@@ -19,8 +18,8 @@ export function NewTaskForm({ addTaskHandler }) {
     }
 
     addTaskHandler(task)
-    setTaskTitle("");
-    setTaskDescription("");
+    setTaskTitle("")
+    setTaskDescription("")
   }
 
   const titleOnChange = (e) => setTaskTitle(e.target.value)

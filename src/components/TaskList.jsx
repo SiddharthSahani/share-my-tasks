@@ -1,5 +1,4 @@
 import { TaskCard } from './TaskCard'
-import React from 'react'
 
 
 export function TaskList({ tasks, toggleStatusHandler, deleteTaskHandler }) {

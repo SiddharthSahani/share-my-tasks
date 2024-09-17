@@ -1,11 +1,11 @@
 "use client"
-import { NewTaskForm } from "@/components/NewTaskForm";
-import { TaskList } from "@/components/TaskList";
-import { useState, useEffect } from "react";
+import { NewTaskForm } from "@/components/NewTaskForm"
+import { TaskList } from "@/components/TaskList"
+import { useState, useEffect } from "react"
 
 
 export default function Home() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState([])
 
   useEffect(() => {
     setTasks([
@@ -58,5 +58,5 @@ export default function Home() {
       <NewTaskForm addTaskHandler={addTask} />
       <TaskList tasks={tasks} toggleStatusHandler={toggleStatus} deleteTaskHandler={deleteTask}/>
     </>
-  );
+  )
 }
