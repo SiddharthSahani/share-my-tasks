@@ -56,7 +56,7 @@ export default function Home() {
         Share My Tasks
       </h1>
       <NewTaskForm addTaskHandler={addTask} />
-      <TaskList tasks={tasks} toggleStatusHandler={toggleStatus} deleteTaskHandler={deleteTask}/>
+      <TaskList allTasks={tasks} toggleStatusHandler={toggleStatus} deleteTaskHandler={deleteTask} />
     </>
   )
 }
