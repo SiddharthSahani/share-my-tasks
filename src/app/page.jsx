@@ -50,13 +50,17 @@ export default function Home() {
     setTasks([...tasks])
   }
 
+  const editable = false;
+
   return (
     <>
       <h1 className="text-center text-4xl font-bold">
         Share My Tasks
       </h1>
-      <NewTaskForm addTaskHandler={addTask} />
-      <TaskList allTasks={tasks} toggleStatusHandler={toggleStatus} deleteTaskHandler={deleteTask} />
+      {
+        editable && <NewTaskForm addTaskHandler={addTask} />
+      }
+      <TaskList allTasks={tasks} toggleStatusHandler={toggleStatus} deleteTaskHandler={deleteTask} editable={editable} />
     </>
   )
 }

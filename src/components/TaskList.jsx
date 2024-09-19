@@ -3,7 +3,7 @@ import { TaskCard } from './TaskCard'
 import { TaskListOptions } from './TaskListOptions'
 
 
-export function TaskList({ allTasks, toggleStatusHandler, deleteTaskHandler }) {
+export function TaskList({ allTasks, toggleStatusHandler, deleteTaskHandler, editable }) {
   const [viewTasks, setViewTasks] = useState([])
 
   const [viewOptions, setViewOptions] = useState({
@@ -20,6 +20,9 @@ export function TaskList({ allTasks, toggleStatusHandler, deleteTaskHandler }) {
     setViewTasks(tasks)
   }, [allTasks, viewOptions])
 
+  const toggleStatus = editable ? toggleStatusHandler : (tid) => {}
+  const deleteTask = editable ? deleteTaskHandler : (tid) => {}
+
   return (
     <>
       <TaskListOptions options={viewOptions} setOptions={setViewOptions} />
@@ -29,8 +32,8 @@ export function TaskList({ allTasks, toggleStatusHandler, deleteTaskHandler }) {
           viewTasks.map(([task, tid], index) => (
             <TaskCard
               key={index} task={task}
-              toggleStatusHandler={() => toggleStatusHandler(tid)}
-              deleteTaskHandler={() => deleteTaskHandler(tid)}
+              toggleStatusHandler={() => toggleStatus(tid)}
+              deleteTaskHandler={() => deleteTask(tid)}
             />
           )) :
           <i className='p-4'>Active tasks will appear here</i>
