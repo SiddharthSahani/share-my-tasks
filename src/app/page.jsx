@@ -29,7 +29,7 @@ export default function Home() {
       },
       {
         title: "TOOO more",
-        description: "Warning: Each child in a list should have a unique 'key' prop. Check the top-level render call using <div>. See https://reactjs.org/link/warning-keys for more information.",
+        description: "Warning: Each child in a list should have a unique 'key' prop. Check the top-level render call using <div>.",
         completed: true,
         priority: 3,
       },
@@ -50,7 +50,7 @@ export default function Home() {
     setTasks([...tasks])
   }
 
-  const editable = false;
+  const editable = true;
 
   return (
     <>
