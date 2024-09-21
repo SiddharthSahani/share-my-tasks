@@ -34,6 +34,7 @@ export function TaskList({ allTasks, toggleStatusHandler, deleteTaskHandler, edi
               key={index} task={task}
               toggleStatusHandler={() => toggleStatus(tid)}
               deleteTaskHandler={() => deleteTask(tid)}
+              editable={editable}
             />
           )) :
           <i className='p-4'>Active tasks will appear here</i>
