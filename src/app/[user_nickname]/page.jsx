@@ -1,24 +1,48 @@
 "use client"
 import { TaskListList } from "@/components/TaskListList"
+import { getLists } from "@/lib/queries/lists"
+import { getUserFromNickname } from "@/lib/queries/users"
 import { useEffect, useState } from "react"
 
 
 export default function Page({ params }) {
   const userNickname = params.user_nickname
-  const [taskLists, setTaskLists] = useState([])
+  const [isMounted, setMounted] = useState(false)
+  const [isLoading, setLoading] = useState(true);
+  const [result, setResult] = useState({
+    isOwner: null,
+    lists: null,
+  })
+
+  const init = async () => {
+    const { userId, isOwner } = await getUserFromNickname(userNickname, "test@mail.com")
+    if (!userId) {
+      return
+    }
+
+    result.isOwner = isOwner
+    result.lists = (await getLists(userId, !isOwner)).documents
+    setResult({ ...result })
+  }
 
   useEffect(() => {
-    setTaskLists([
-      {name: 'Learning Web Development', public: false},
-      {name: 'Artificial Intelligence From Scratch', public: true},
-      {name: 'Data Structures and Algorithms', public: false},
-    ])
-  })
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (isMounted) {
+      init().then(() => setLoading(false))
+    }
+  }, [isMounted])
 
   return (
     <>
       <h1 className="text-3xl text-center font-bold">{userNickname}'s List</h1>
-      <TaskListList lists={taskLists} isOwner={false} />
+      {
+        isLoading ?
+        "loading..." :
+        <TaskListList lists={result.lists} isOwner={result.isOwner} />
+      }
     </>
   )
 }
