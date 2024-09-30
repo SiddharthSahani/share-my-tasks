@@ -32,7 +32,7 @@ export async function getLists(userId, onlyPublic) {
     )
 
     console.log(`getLists(${userId}, ${onlyPublic})`, JSON.stringify(lists).length)
-    return lists
+    return lists.documents
 }
 
 

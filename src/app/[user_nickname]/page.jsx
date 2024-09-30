@@ -21,7 +21,7 @@ export default function Page({ params }) {
     }
 
     result.isOwner = isOwner
-    result.lists = (await getLists(userId, !isOwner)).documents
+    result.lists = await getLists(userId, !isOwner)
     setResult({ ...result })
   }
 
@@ -37,7 +37,7 @@ export default function Page({ params }) {
 
   return (
     <>
-      <h1 className="text-3xl text-center font-bold">{userNickname}'s List</h1>
+      <h1 className="text-3xl text-center font-bold">{userNickname}'s Lists</h1>
       {
         isLoading ?
         "loading..." :
