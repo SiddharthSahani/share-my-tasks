@@ -24,7 +24,7 @@ export async function getUserFromNickname(nickname, viewerEmail) {
     )
     console.log(`getUserFromNickname(${nickname}, ${viewerEmail})`, JSON.stringify(docs).length)
 
-    if (docs.length === 0) {
+    if (docs.total === 0) {
         return {
             userId: null,
             isOwner: false,
