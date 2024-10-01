@@ -50,7 +50,7 @@ export default function Home() {
     setTasks([...tasks])
   }
 
-  const editable = true;
+  const editable = true
 
   return (
     <>

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "next/link"
 
 export function TaskListList({ lists, isOwner }) {
   return (
@@ -7,7 +7,7 @@ export function TaskListList({ lists, isOwner }) {
         lists.length ?
         lists.map((list, index) => (
           <div key={index} className="bg-cyan-600 rounded-xl my-2 flex px-2 py-2">
-            <Link href={`${location.pathname}/${list.$id}`} className="w-9/12 flex my-4 items-center justify-center">
+            <Link href={`${location.pathname}/${list.name.replace(" ", "-")}`} className="w-9/12 flex my-4 items-center justify-center">
               <div className="w-3/12 text-2xl font-semibold">List Name:</div>
               <div className="w-9/12 text-2xl">{list.name}</div>
             </Link>

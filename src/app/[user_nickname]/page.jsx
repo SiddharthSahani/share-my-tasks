@@ -9,11 +9,8 @@ import { useEffect, useState } from "react"
 export default function Page({ params }) {
   const userNickname = params.user_nickname
   const [isMounted, setMounted] = useState(false)
-  const [isLoading, setLoading] = useState(true);
-  const [result, setResult] = useState({
-    isOwner: null,
-    lists: null,
-  })
+  const [isLoading, setLoading] = useState(true)
+  const [result, setResult] = useState(null)
 
   const init = async () => {
     const { userId, isOwner } = await getUserFromNickname(userNickname, "test@mail.com")
@@ -21,9 +18,8 @@ export default function Page({ params }) {
       return
     }
 
-    result.isOwner = isOwner
-    result.lists = await getLists(userId, !isOwner)
-    setResult({ ...result })
+    const lists = await getLists(userId, !isOwner)
+    setResult({isOwner, lists})
   }
 
   useEffect(() => {
@@ -40,7 +36,7 @@ export default function Page({ params }) {
     return `Loading ${userNickname}'s lists`
   }
 
-  if (result.isOwner === null) {
+  if (result === null) {
     return <NotFound message={`${userNickname} does not exist`} />
   }
 
