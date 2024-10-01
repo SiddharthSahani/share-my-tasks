@@ -1,5 +1,6 @@
 "use client"
 import { TaskListList } from "@/components/TaskListList"
+import { NotFound } from "@/components/NotFound"
 import { getLists } from "@/lib/queries/lists"
 import { getUserFromNickname } from "@/lib/queries/users"
 import { useEffect, useState } from "react"
@@ -35,14 +36,18 @@ export default function Page({ params }) {
     }
   }, [isMounted])
 
+  if (isLoading) {
+    return `Loading ${userNickname}'s lists`
+  }
+
+  if (result.isOwner === null) {
+    return <NotFound message={`${userNickname} does not exist`} />
+  }
+
   return (
     <>
       <h1 className="text-3xl text-center font-bold">{userNickname}'s Lists</h1>
-      {
-        isLoading ?
-        "loading..." :
-        <TaskListList lists={result.lists} isOwner={result.isOwner} />
-      }
+      <TaskListList lists={result.lists} isOwner={result.isOwner} />
     </>
   )
 }
