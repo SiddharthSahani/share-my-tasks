@@ -15,11 +15,12 @@ export default function Page({ params }) {
   const init = async () => {
     const { userId, isOwner } = await getUserFromNickname(userNickname, "test@mail.com")
     if (!userId) {
+      setResult({ error: `User name not found: ${userNickname}` })
       return
     }
 
     const lists = await getLists(userId, !isOwner)
-    setResult({isOwner, lists})
+    setResult({ isOwner, lists })
   }
 
   useEffect(() => {
@@ -36,8 +37,9 @@ export default function Page({ params }) {
     return `Loading ${userNickname}'s lists`
   }
 
-  if (result === null) {
-    return <NotFound message={`${userNickname} does not exist`} />
+  if (result.error !== undefined) {
+    // the user may not exist
+    return <NotFound message={result.error} />
   }
 
   return (

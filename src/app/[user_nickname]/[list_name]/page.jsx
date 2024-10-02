@@ -17,17 +17,23 @@ export default function Page({ params }) {
   const init = async () => {
     const { userId, isOwner } = await getUserFromNickname(userNickname, "test@mail.com")
     if (!userId) {
+      setResult({ error: `User name not found: ${userNickname}` })
       return
     }
 
     const { listId, isPublic } = await getListFromName(userId, listName.replace('-', " "))
-    if (!listId || !isPublic) {
+    if (!listId) {
+      setResult({ error: `List not found: ${listName}` })
+      return
+    }
+    if (!isPublic) {
+      setResult({ error: `List not public: ${listName}` })
       return
     }
 
     const tasks = await getTasks(listId)
     console.log(tasks)
-    setResult({listId, tasks, isOwner})
+    setResult({ listId, tasks, isOwner })
   }
 
   useEffect(() => {
@@ -44,11 +50,11 @@ export default function Page({ params }) {
     return `Loading ${userNickname}'s list ${listName}`
   }
 
-  if (result === null) {
+  if (result.error !== undefined) {
     // the user may not exist
     // the list may not exist
     // the list is not public
-    return <NotFound message={`${userNickname}/${listName} does not exist`} />
+    return <NotFound message={result.error} />
   }
 
   return (
