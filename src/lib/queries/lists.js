@@ -16,6 +16,33 @@ export async function createList(list, userId) {
 }
 
 
+export async function getListFromName(userId, listName) {
+    const docs = await database.listDocuments(
+        process.env.APPWRITE_DATABASE_ID,
+        process.env.APPWRITE_LISTS_COLLECTION_ID,
+        [
+            Query.equal("user", userId),
+            Query.equal("name", listName),
+            Query.select(["$id", "public"]),
+        ],
+    )
+
+    console.log(`getListFromName(${userId}, ${listName})`, JSON.stringify(docs).length)
+
+    if (docs.total === 0) {
+        return {
+            listId: null,
+            isPublic: false,
+        }
+    }
+
+    return {
+        listId: docs.documents[0].$id,
+        isPublic: docs.documents[0].public,
+    }
+}
+
+
 export async function getLists(userId, onlyPublic) {
     const queries = [
         Query.equal("user", userId),

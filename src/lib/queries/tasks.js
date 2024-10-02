@@ -17,7 +17,7 @@ export async function createTask(task, listId) {
 
 
 export async function getTasks(listId) {
-    return await database.listDocuments(
+    const tasks = await database.listDocuments(
         process.env.APPWRITE_DATABASE_ID,
         process.env.APPWRITE_TASKS_COLLECTION_ID,
         [
@@ -25,6 +25,9 @@ export async function getTasks(listId) {
             Query.select(["$id", "title", "description", "priority", "completed"]),
         ],
     )
+
+    console.log(`getTasks(${listId})`, JSON.stringify(tasks).length)
+    return tasks.documents
 }
 
 
