@@ -1,4 +1,5 @@
 "use client"
+import { NewTaskForm } from "@/components/NewTaskForm"
 import { NotFound } from "@/components/NotFound"
 import { TaskList } from "@/components/TaskList"
 import { getListFromName } from "@/lib/queries/lists"
@@ -57,14 +58,31 @@ export default function Page({ params }) {
     return <NotFound message={result.error} />
   }
 
+  const addTask = (task) => {
+    setResult({...result, tasks: [...result.tasks, task]})
+  }
+
+  const toggleStatus = (index) => {
+    result.tasks[index].completed = !result.tasks[index].completed
+    setResult({...result, tasks: [...result.tasks]})
+  }
+
+  const deleteTask = (index) => {
+    result.tasks.splice(index, 1)
+    setResult({...result, tasks: [...result.tasks]})
+  }
+
   return (
     <>
       <h1 className="text-3xl text-center font-bold">{userNickname}'s {listName}</h1>
+      {
+        result.isOwner && <NewTaskForm addTaskHandler={addTask} />
+      }
       <TaskList
         allTasks={result.tasks}
         editable={result.isOwner}
-        toggleStatusHandler={(tid) => console.log("Toggled", tid)}
-        deleteTaskHandler={(tid) => console.log("Deleted", tid)}
+        toggleStatusHandler={toggleStatus}
+        deleteTaskHandler={deleteTask}
       />
     </>
   )
