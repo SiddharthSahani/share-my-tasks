@@ -3,7 +3,7 @@ import { NewTaskForm } from "@/components/NewTaskForm"
 import { NotFound } from "@/components/NotFound"
 import { TaskList } from "@/components/TaskList"
 import { getListFromName } from "@/lib/queries/lists"
-import { getTasks } from "@/lib/queries/tasks"
+import { createTask, getTasks, updateTask, deleteTask } from "@/lib/queries/tasks"
 import { getUserFromNickname } from "@/lib/queries/users"
 import { useEffect, useState } from "react"
 
@@ -33,7 +33,6 @@ export default function Page({ params }) {
     }
 
     const tasks = await getTasks(listId)
-    console.log(tasks)
     setResult({ listId, tasks, isOwner })
   }
 
@@ -58,17 +57,20 @@ export default function Page({ params }) {
     return <NotFound message={result.error} />
   }
 
-  const addTask = (task) => {
-    setResult({...result, tasks: [...result.tasks, task]})
+  const addTaskHandler = async (task) => {
+    const taskId = await createTask(task, result.listId)
+    setResult({...result, tasks: [...result.tasks, {$id: taskId, ...task}]})
   }
 
-  const toggleStatus = (index) => {
-    result.tasks[index].completed = !result.tasks[index].completed
+  const toggleTaskHandler = async (task) => {
+    await updateTask(task.$id, {completed: !task.completed})
+    task.completed = !task.completed
     setResult({...result, tasks: [...result.tasks]})
   }
 
-  const deleteTask = (index) => {
-    result.tasks.splice(index, 1)
+  const deleteTaskHandler = async (task) => {
+    await deleteTask(task.$id)
+    result.tasks = result.tasks.filter((other) => other.$id !== task.$id)
     setResult({...result, tasks: [...result.tasks]})
   }
 
@@ -76,13 +78,13 @@ export default function Page({ params }) {
     <>
       <h1 className="text-3xl text-center font-bold">{userNickname}'s {listName}</h1>
       {
-        result.isOwner && <NewTaskForm addTaskHandler={addTask} />
+        result.isOwner && <NewTaskForm addTaskHandler={addTaskHandler} />
       }
       <TaskList
         allTasks={result.tasks}
         editable={result.isOwner}
-        toggleStatusHandler={toggleStatus}
-        deleteTaskHandler={deleteTask}
+        toggleStatusHandler={toggleTaskHandler}
+        deleteTaskHandler={deleteTaskHandler}
       />
     </>
   )

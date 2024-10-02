@@ -15,6 +15,7 @@ export function NewTaskForm({ addTaskHandler }) {
       title: taskTitle.trim(),
       description: taskDescription.trim(),
       priority: taskPriority,
+      completed: false,
     }
 
     addTaskHandler(task)

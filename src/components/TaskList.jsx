@@ -14,9 +14,9 @@ export function TaskList({ allTasks, toggleStatusHandler, deleteTaskHandler, edi
   })
 
   useEffect(() => {
-    let tasks = allTasks.map((task, index) => [task, index])
-    tasks = tasks.filter(([task, _]) => viewOptions.priorities[task.priority - 1] && viewOptions.statuses[task.completed ? 0 : 1])
-    tasks.sort((a, b) => (viewOptions.sortOrder === "asc" ? 1 : -1) * (a[0].priority - b[0].priority))
+    let tasks = [...allTasks]
+    tasks = tasks.filter((task) => viewOptions.priorities[task.priority - 1] && viewOptions.statuses[task.completed ? 0 : 1])
+    tasks.sort((a, b) => (viewOptions.sortOrder === "asc" ? 1 : -1) * (a.priority - b.priority))
     setViewTasks(tasks)
   }, [allTasks, viewOptions])
 
@@ -29,11 +29,11 @@ export function TaskList({ allTasks, toggleStatusHandler, deleteTaskHandler, edi
       <div className="bg-[#2d3746] rounded-xl px-2 py-1">
         {
           viewTasks.length ?
-          viewTasks.map(([task, tid], index) => (
+          viewTasks.map((task, index) => (
             <TaskCard
               key={index} task={task}
-              toggleStatusHandler={() => toggleStatus(tid)}
-              deleteTaskHandler={() => deleteTask(tid)}
+              toggleStatusHandler={() => toggleStatus(task)}
+              deleteTaskHandler={() => deleteTask(task)}
               editable={editable}
             />
           )) :

@@ -4,7 +4,7 @@ import { database } from "../appwrite"
 
 
 export async function createTask(task, listId) {
-    await database.createDocument(
+    const doc = await database.createDocument(
         process.env.APPWRITE_DATABASE_ID,
         process.env.APPWRITE_TASKS_COLLECTION_ID,
         ID.unique(),
@@ -13,6 +13,9 @@ export async function createTask(task, listId) {
             list: listId,
         },
     )
+
+    console.log("SERVER-LOG", `createTask(OBJECT, "${listId}")`, JSON.stringify(task).length, JSON.stringify(doc).length)
+    return doc.$id
 }
 
 
@@ -26,18 +29,20 @@ export async function getTasks(listId) {
         ],
     )
 
-    console.log(`getTasks(${listId})`, JSON.stringify(tasks).length)
+    console.log("SERVER-LOG", `getTasks("${listId}")`, JSON.stringify(tasks).length)
     return tasks.documents
 }
 
 
 export async function updateTask(taskId, data) {
-    await database.updateDocument(
+    const doc = await database.updateDocument(
         process.env.APPWRITE_DATABASE_ID,
         process.env.APPWRITE_TASKS_COLLECTION_ID,
         taskId,
         data,
     )
+
+    console.log("SERVER-LOG", `updateTask(OBJECT, "${taskId}")`, JSON.stringify(data).length, JSON.stringify(doc).length)
 }
 
 
@@ -47,4 +52,6 @@ export async function deleteTask(taskId) {
         process.env.APPWRITE_TASKS_COLLECTION_ID,
         taskId,
     )
+
+    console.log("SERVER-LOG", `deleteTask("${taskId}")`, 0)
 }
