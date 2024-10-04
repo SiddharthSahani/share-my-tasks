@@ -1,18 +1,31 @@
 "use server"
-import { ID, Query } from "appwrite"
+import { Query } from "appwrite"
 import { database } from "../appwrite"
 
 
-export async function createList(list, userId) {
-    await database.createDocument(
+export async function getLists(userId, onlyPublic) {
+    const queries = [
+        Query.equal("u", userId),
+        Query.select(["$id", "n", "p"]),
+    ]
+    if (onlyPublic) {
+        queries.push(Query.equal("p", true))
+    }
+
+    const docs = await database.listDocuments(
         process.env.APPWRITE_DATABASE_ID,
         process.env.APPWRITE_LISTS_COLLECTION_ID,
-        ID.unique(),
-        {
-            ...list,
-            user: userId,
-        },
+        queries,
     )
+
+    console.log(`LOG | getLists("${userId}", ${onlyPublic})`, JSON.stringify(docs).length)
+
+    return docs.documents.map((doc) => {
+        return {
+            name: doc.n,
+            public: doc.p,
+        }
+    })
 }
 
 
@@ -21,62 +34,23 @@ export async function getListFromName(userId, listName) {
         process.env.APPWRITE_DATABASE_ID,
         process.env.APPWRITE_LISTS_COLLECTION_ID,
         [
-            Query.equal("user", userId),
-            Query.equal("name", listName),
-            Query.select(["$id", "public"]),
+            Query.equal("u", userId),
+            Query.equal("n", listName),
+            Query.select(["$id", "p"]),
         ],
     )
 
-    console.log(`getListFromName(${userId}, ${listName})`, JSON.stringify(docs).length)
+    console.log(`LOG | getListFromName("${userId}", "${listName}")`, JSON.stringify(docs).length)
 
     if (docs.total === 0) {
         return {
             listId: null,
             isPublic: false,
         }
+    } else {
+        return {
+            listId: docs.documents[0].$id,
+            isPublic: docs.documents[0].p,
+        }
     }
-
-    return {
-        listId: docs.documents[0].$id,
-        isPublic: docs.documents[0].public,
-    }
-}
-
-
-export async function getLists(userId, onlyPublic) {
-    const queries = [
-        Query.equal("user", userId),
-        Query.select(["$id", "name", "public"]),
-    ]
-    if (onlyPublic) {
-        queries.push(Query.equal("public", true))
-    }
-
-    const lists = await database.listDocuments(
-        process.env.APPWRITE_DATABASE_ID,
-        process.env.APPWRITE_LISTS_COLLECTION_ID,
-        queries,
-    )
-
-    console.log(`getLists(${userId}, ${onlyPublic})`, JSON.stringify(lists).length)
-    return lists.documents
-}
-
-
-export async function updateList(listId, data) {
-    await database.updateDocument(
-        process.env.APPWRITE_DATABASE_ID,
-        process.env.APPWRITE_LISTS_COLLECTION_ID,
-        listId,
-        data,
-    )
-}
-
-
-export async function deleteList(listId) {
-    await database.deleteDocument(
-        process.env.APPWRITE_DATABASE_ID,
-        process.env.APPWRITE_LISTS_COLLECTION_ID,
-        listId,
-    )
 }

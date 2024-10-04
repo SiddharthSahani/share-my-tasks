@@ -1,16 +1,6 @@
 "use server"
-import { ID, Query } from "appwrite"
+import { Query } from "appwrite"
 import { database } from "../appwrite"
-
-
-export async function createUser(user) {
-    await database.createDocument(
-        process.env.APPWRITE_DATABASE_ID,
-        process.env.APPWRITE_USERS_COLLECTION_ID,
-        ID.unique(),
-        user,
-    )
-}
 
 
 export async function getUserFromNickname(nickname, viewerEmail) {
@@ -18,12 +8,14 @@ export async function getUserFromNickname(nickname, viewerEmail) {
         process.env.APPWRITE_DATABASE_ID,
         process.env.APPWRITE_USERS_COLLECTION_ID,
         [
-            Query.equal("nickname", nickname),
-            Query.select(["$id", "email"]),
+            Query.equal("n", nickname),
+            Query.select(["$id", "e"]),
         ],
     )
-    console.log(`getUserFromNickname(${nickname}, ${viewerEmail})`, JSON.stringify(docs).length)
 
+    console.log(`LOG | getUserFromNickname("${nickname}", "${viewerEmail}")`, JSON.stringify(docs).length)
+
+    // no user with that nickname
     if (docs.total === 0) {
         return {
             userId: null,
@@ -32,9 +24,10 @@ export async function getUserFromNickname(nickname, viewerEmail) {
     }
 
     if (viewerEmail) {
+        // check if the viewer is the owner
         return {
             userId: docs.documents[0].$id,
-            isOwner: docs.documents[0].email === viewerEmail,
+            isOwner: docs.documents[0].e === viewerEmail,
         }
     } else {
         return {
