@@ -77,3 +77,19 @@ export async function deleteTask(taskId) {
 
     console.log(`LOG | deleteTask("${taskId}")`, JSON.stringify(doc).length)
 }
+
+
+export async function deleteTasks(listId) {
+    const docs = await database.listDocuments(
+        process.env.APPWRITE_DATABASE_ID,
+        process.env.APPWRITE_TASKS_COLLECTION_ID,
+        [
+            Query.equal("l", listId),
+            Query.select(["$id"]),
+        ],
+    )
+
+    console.log(`LOG | deleteTasks("${listId}")`, JSON.stringify(docs).length)
+
+    docs.documents.forEach((doc) => deleteTask(doc.$id))
+}
