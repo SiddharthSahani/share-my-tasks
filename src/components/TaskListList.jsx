@@ -1,6 +1,10 @@
 import Link from "next/link"
 
-export function TaskListList({ lists, isOwner }) {
+export function TaskListList({ lists, isOwner, toggleListHandler, deleteListHandler }) {
+
+  const toggleList = isOwner ? toggleListHandler : (_) => {}
+  const deleteList = isOwner ? deleteListHandler : (_) => {}
+
   return (
     <div className="bg-[#2d3746] rounded-xl px-2 py-1">
       {
@@ -14,7 +18,7 @@ export function TaskListList({ lists, isOwner }) {
             {
               isOwner &&
               <div className="w-3/12 flex">
-                <button className='w-2/3 bg-cyan-700 mr-3 rounded-lg text-lg'>
+                <button className='w-2/3 bg-cyan-700 mr-3 rounded-lg text-lg' onClick={() => toggleList(list)}>
                   Status:
                   <div className={`text-xl ${list.public ? "text-green-300" : "text-rose-300"}`}>
                   {
@@ -22,7 +26,7 @@ export function TaskListList({ lists, isOwner }) {
                   }
                   </div>
                 </button>
-                <button className='w-1/3 bg-rose-500 text-xl rounded-lg' >Delete</button>
+                <button className='w-1/3 bg-rose-500 text-xl rounded-lg' onClick={() => deleteList(list)}>Delete</button>
               </div>
             }
           </div>

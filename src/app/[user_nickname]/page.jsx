@@ -1,7 +1,7 @@
 "use client"
 import { TaskListList } from "@/components/TaskListList"
 import { NotFound } from "@/components/NotFound"
-import { getLists } from "@/lib/queries/lists"
+import { deleteList, getLists, updateList } from "@/lib/queries/lists"
 import { getUserFromNickname } from "@/lib/queries/users"
 import { useEffect, useState } from "react"
 
@@ -42,10 +42,27 @@ export default function Page({ params }) {
     return <NotFound message={result.error} />
   }
 
+  const toggleListHandler = async (list) => {
+    await updateList(list.$id, {public: !list.public})
+    list.public = !list.public
+    setResult({ ...result })
+  }
+
+  const deleteListHandler = async (list) => {
+    await deleteList(list.$id)
+    result.lists = result.lists.filter((other) => other.$id !== list.$id)
+    setResult({ ...result })
+  }
+
   return (
     <>
       <h1 className="text-3xl text-center font-bold">{userNickname}'s Lists</h1>
-      <TaskListList lists={result.lists} isOwner={result.isOwner} />
+      <TaskListList
+        lists={result.lists}
+        isOwner={result.isOwner}
+        toggleListHandler={toggleListHandler}
+        deleteListHandler={deleteListHandler}
+      />
     </>
   )
 }

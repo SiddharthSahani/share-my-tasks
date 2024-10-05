@@ -59,19 +59,20 @@ export default function Page({ params }) {
 
   const addTaskHandler = async (task) => {
     const taskId = await createTask(task, result.listId)
-    setResult({...result, tasks: [...result.tasks, {$id: taskId, ...task}]})
+    result.tasks = [ ...result.tasks, {$id: taskId, ...task} ]
+    setResult({ ...result })
   }
 
   const toggleTaskHandler = async (task) => {
     await updateTask(task.$id, {completed: !task.completed})
     task.completed = !task.completed
-    setResult({...result, tasks: [...result.tasks]})
+    setResult({ ...result })
   }
 
   const deleteTaskHandler = async (task) => {
     await deleteTask(task.$id)
     result.tasks = result.tasks.filter((other) => other.$id !== task.$id)
-    setResult({...result, tasks: [...result.tasks]})
+    setResult({ ...result })
   }
 
   return (
